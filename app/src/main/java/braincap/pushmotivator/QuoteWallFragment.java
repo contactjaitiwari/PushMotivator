@@ -14,6 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +51,13 @@ public class QuoteWallFragment extends Fragment {
         Log.d(TAG, "onCreateView: ");
         context = getActivity();
 
+
+        copyBundledRealmFile(this.getResources().openRawResource(R.raw.default_realm), "default_realm");
         RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
         mRealm = Realm.getInstance(config0);
+
+        //RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
+        // mRealm = Realm.getInstance(config0);
 
         mResults = mRealm.where(Quote.class).findAll();
         indices = new ArrayList<>();
@@ -94,6 +103,23 @@ public class QuoteWallFragment extends Fragment {
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         recyclerView.addItemDecoration(decoration);
 
+    }
+
+    private String copyBundledRealmFile(InputStream inputStream, String outFileName) {
+        try {
+            File file = new File(context.getFilesDir(), outFileName);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, bytesRead);
+            }
+            outputStream.close();
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
