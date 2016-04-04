@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import braincap.pushmotivator.R;
-import braincap.pushmotivator.beans.Quote;
+import braincap.pushmotivator.beans.Author;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -21,33 +21,34 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     private static final String TAG = "JT";
     private Context mContext;
     private LayoutInflater mInflater;
-    private Realm mRealm;
-    private RealmResults<Quote> mResults;
-    private Activity mActivity;
+    private RealmResults<Author> mResults;
+    private OnAuthorSelectedListener onAuthorSelectedListener;
 
-
-    public AuthorRecyclerViewAdapter(Context context, Realm realm, RealmResults<Quote> results, Activity activity) {
+    public AuthorRecyclerViewAdapter(Context context, Realm realm, RealmResults<Author> results, Activity activity) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mRealm = realm;
         mResults = results;
-        mActivity = activity;
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.author, parent, false);
-        return new QuoteHolder(view);
+        return new AuthorHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof QuoteHolder) {
-            QuoteHolder quoteHolder = (QuoteHolder) holder;
-            Quote quote = mResults.get(position);
-            quoteHolder.mAuthor.setText(quote.getPOST_DESCRIPTION());
+        if (holder instanceof AuthorHolder) {
+            AuthorHolder authorHolder = (AuthorHolder) holder;
+            Author author = mResults.get(position);
+            authorHolder.mAuthor.setText(author.getAUTH_NAME());
+            authorHolder.mCount.setText(author.getCOUNT() + "");
         }
+    }
+
+    public void setOnAuthorSelectedListener(OnAuthorSelectedListener onAuthorSelectedListener) {
+        this.onAuthorSelectedListener = onAuthorSelectedListener;
     }
 
     @Override
@@ -55,15 +56,27 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         return mResults.size();
     }
 
-    public static class QuoteHolder extends RecyclerView.ViewHolder {
-        TextView mAuthor;
-
-        public QuoteHolder(View itemView) {
-            super(itemView);
-            mAuthor = (TextView) itemView.findViewById(R.id.tv_author);
-        }
-
+    public interface OnAuthorSelectedListener {
+        void onAuthorSelected(View view);
     }
 
+    public class AuthorHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mAuthor;
+        TextView mCount;
+
+        public AuthorHolder(View itemView) {
+            super(itemView);
+            mAuthor = (TextView) itemView.findViewById(R.id.tv_author);
+            mCount = (TextView) itemView.findViewById(R.id.tv_count);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (onAuthorSelectedListener != null) {
+                onAuthorSelectedListener.onAuthorSelected(itemView);
+            }
+        }
+    }
 
 }

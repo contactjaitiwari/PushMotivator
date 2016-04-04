@@ -1,12 +1,17 @@
 package braincap.pushmotivator;
 
 import android.app.Application;
-import android.util.Log;
+
+import com.facebook.stetho.Stetho;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by Jai on 3/21/2016.
@@ -18,18 +23,19 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        /*
+
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
                         .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                         .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
                         .build());
-                        */
-        Log.d(TAG, "onCreate: Application class called");
 
-        //copyBundledRealmFile(this.getResources().openRawResource(R.raw.default_realm), "default_realm");
-        //RealmConfiguration config0 = new RealmConfiguration.Builder(this).name("default_realm").build();
-        //Realm.setDefaultConfiguration(config0);
+        copyBundledRealmFile(this.getResources().openRawResource(R.raw.default_realm), "default_realm");
+        RealmConfiguration config0 = new RealmConfiguration.Builder(this).name("default_realm").build();
+        Realm.setDefaultConfiguration(config0);
+
+
+
     }
 
     private String copyBundledRealmFile(InputStream inputStream, String outFileName) {

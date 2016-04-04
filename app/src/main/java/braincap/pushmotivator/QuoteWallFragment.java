@@ -14,10 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,33 +34,45 @@ public class QuoteWallFragment extends Fragment {
     RealmResults<Quote> mResults;
     Activity context;
     List<Integer> indices;
+    String mAuthorNameReceived;
 
     public QuoteWallFragment() {
         // Required empty public constructor
-        Log.d(TAG, "QuoteWallFragment: ");
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mAuthorNameReceived = getArguments().getString("1", null);
+            Log.d(TAG, "onCreate: " + mAuthorNameReceived);
+        }
+        Log.d(TAG, "onCreate: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d(TAG, "onCreateView: ");
         context = getActivity();
-
-
-        copyBundledRealmFile(this.getResources().openRawResource(R.raw.default_realm), "default_realm");
         RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
         mRealm = Realm.getInstance(config0);
-
-        //RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
-        // mRealm = Realm.getInstance(config0);
-
-        mResults = mRealm.where(Quote.class).findAll();
+        if (mAuthorNameReceived != null) {
+            mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mAuthorNameReceived).findAll();
+            Log.d(TAG, "Fragment Wall: Limited rows fetched");
+        } else {
+            mResults = mRealm.where(Quote.class).findAll();
+            Log.d(TAG, "Fragment Wall: All rows fetched");
+        }
         indices = new ArrayList<>();
         for (int i = 0; i < mResults.size(); i++) {
             indices.add(i);
         }
-        Log.d(TAG, "onCreateView: "+mRealm.isEmpty());
         return inflater.inflate(R.layout.fragment_quote_wall, container, false);
     }
 
@@ -72,12 +80,9 @@ public class QuoteWallFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) context.findViewById(R.id.recycler_view);
-        Log.d(TAG, "onViewCreated: ");
 
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) context.findViewById(R.id.swipe_refresh_layout);
-
         recyclerView.setHasFixedSize(true);
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -91,35 +96,12 @@ public class QuoteWallFragment extends Fragment {
             }
         });
 
-
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        //Trying to read default_realm.realm.realm file
-
-        WallRecyclerViewAdapter rcAdapter = new WallRecyclerViewAdapter(context, null, mResults, indices, getActivity());
+        WallRecyclerViewAdapter rcAdapter = new WallRecyclerViewAdapter(context, mResults, indices, getActivity());
         recyclerView.setAdapter(rcAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         recyclerView.addItemDecoration(decoration);
-
     }
-
-    private String copyBundledRealmFile(InputStream inputStream, String outFileName) {
-        try {
-            File file = new File(context.getFilesDir(), outFileName);
-            FileOutputStream outputStream = new FileOutputStream(file);
-            byte[] buf = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buf)) > 0) {
-                outputStream.write(buf, 0, bytesRead);
-            }
-            outputStream.close();
-            return file.getAbsolutePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

@@ -1,6 +1,5 @@
 package braincap.pushmotivator.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import braincap.pushmotivator.R;
 import braincap.pushmotivator.beans.Quote;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -28,19 +26,15 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final String TAG = "JT";
     private Context mContext;
     private LayoutInflater mInflater;
-    private Realm mRealm;
     private RealmResults<Quote> mResults;
     private List<Integer> mIndices;
-    private Activity mActivity;
 
 
-    public WallRecyclerViewAdapter(Context context, Realm realm, RealmResults<Quote> results, List<Integer> indices, FragmentActivity activity) {
+    public WallRecyclerViewAdapter(Context context, RealmResults<Quote> results, List<Integer> indices, FragmentActivity activity) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mRealm = realm;
         mResults = results;
         mIndices = indices;
-        mActivity = activity;
 
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -92,6 +86,5 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
             mQuote = (TextView) itemView.findViewById(R.id.tv_quote);
         }
-
     }
 }

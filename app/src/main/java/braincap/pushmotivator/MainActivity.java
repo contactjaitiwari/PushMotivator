@@ -4,14 +4,33 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.facebook.stetho.Stetho;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
+
+import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener {
+    private static final String TAG = "JT";
+
+    public static QuoteWallFragment newInstance(String mAuthorName) {
+        QuoteWallFragment quoteWallFragment = new QuoteWallFragment();
+
+        Bundle args = new Bundle();
+        args.putString("1", mAuthorName);
+        quoteWallFragment.setArguments(args);
+        Log.d(TAG, "newInstance: " + quoteWallFragment.getArguments().getString("1", null));
+        return quoteWallFragment;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         Realm.setDefaultConfiguration(configuration);
 
         Button btnWall = (Button) findViewById(R.id.btn_wall);
+        Button btnAuth = (Button) findViewById(R.id.btn_auth);
         if (btnWall != null) {
             btnWall.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -39,7 +59,30 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        /*
+        if (btnAuth != null) {
+            btnAuth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    AuthorFragment authorFragment = new AuthorFragment();
+                    authorFragment.setGiveAuthorToActivityListener(MainActivity.this);
+                    fragmentManager.beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.myfrag, authorFragment, "FRAGAUTH");
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commitAllowingStateLoss();
+                }
+            });
+        }
+
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build());
+
         RealmInspectorModulesProvider.builder(this)
                 .withFolder(getCacheDir())
                 .withMetaTables()
@@ -47,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 .withLimit(1000)
                 .databaseNamePattern(Pattern.compile(".+\\.realm"))
                 .build();
-        */
+
     }
 
     @Override
@@ -57,5 +100,18 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    @Override
+    public void giveAuthorToActivity(String mAuthorName) {
+        Toast.makeText(MainActivity.this, "Main Activity : " + mAuthorName, Toast.LENGTH_SHORT).show();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        QuoteWallFragment quoteWallFragment = newInstance(mAuthorName);
+        fragmentManager.beginTransaction();
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }
