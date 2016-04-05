@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
     @Override
     public void giveAuthorToActivity(String mAuthorName) {
-        Toast.makeText(MainActivity.this, "Main Activity : " + mAuthorName, Toast.LENGTH_SHORT).show();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         QuoteWallFragment quoteWallFragment = newInstance(mAuthorName);

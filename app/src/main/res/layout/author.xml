@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#1976D2"
+            android:background="@color/darkColor"
             android:padding="10dp"
             android:textColor="#ffffff"
             android:textSize="15sp" />
@@ -33,7 +33,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#1976D2"
+                android:background="@color/darkColor"
                 android:contentDescription="@string/number_count"
                 android:padding="5dp"
                 android:scaleType="fitCenter"

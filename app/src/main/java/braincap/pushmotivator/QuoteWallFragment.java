@@ -2,8 +2,10 @@ package braincap.pushmotivator;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +86,15 @@ public class QuoteWallFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) context.findViewById(R.id.recycler_view);
 
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show();
+            }
+        });
+
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) context.findViewById(R.id.swipe_refresh_layout);
         recyclerView.setHasFixedSize(true);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -103,5 +117,23 @@ public class QuoteWallFragment extends Fragment {
         recyclerView.setAdapter(rcAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(5);
         recyclerView.addItemDecoration(decoration);
+    }
+
+    private void show() {
+        final Dialog d = new Dialog(context);
+        d.setTitle("NumberPicker");
+        d.setContentView(R.layout.number_picker);
+        Button b1 = (Button) d.findViewById(R.id.startButton);
+        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker);
+        np.setMaxValue(10); // max value 100
+        np.setMinValue(0);   // min value 0
+        np.setWrapSelectorWheel(false);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Set Value", Toast.LENGTH_SHORT).show();
+            }
+        });
+        d.show();
     }
 }

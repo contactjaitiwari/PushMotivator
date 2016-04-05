@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
@@ -84,7 +83,6 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
     @Override
     public void onAuthorSelected(View view) {
         if (giveAuthorToActivityListener != null) {
-            Toast.makeText(context, "Fragment Function : " + ((TextView) view.findViewById(R.id.tv_author)).getText(), Toast.LENGTH_SHORT).show();
             giveAuthorToActivityListener.giveAuthorToActivity((String) ((TextView) view.findViewById(R.id.tv_author)).getText());
         }
     }

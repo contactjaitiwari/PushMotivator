@@ -17,8 +17,11 @@
 
     <style name="MyButton" parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">#40C9A2</item>
-        <item name="colorButtonNormal">#A3F7B5</item>
+        <item name="colorButtonNormal">@color/lightColor</item>
     </style>
 
+    <style name="NumberPickerTextColorStyle">
+        <item name="android:textColorPrimary">@color/lightColor</item>
+    </style>
 
 </resources>
