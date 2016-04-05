@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:padding="5dp">
 
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
@@ -15,6 +16,18 @@
             android:background="#A3F7B5"
             android:scrollbars="vertical" />
 
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/recycler_view"
+            android:layout_alignEnd="@id/recycler_view"
+            android:layout_alignRight="@id/recycler_view"
+            android:layout_margin="16dp"
+            android:src="@drawable/app_icon" />
+
+
     </RelativeLayout>
+
 
 </android.support.v4.widget.SwipeRefreshLayout>

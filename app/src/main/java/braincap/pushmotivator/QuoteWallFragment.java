@@ -101,7 +101,7 @@ public class QuoteWallFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         WallRecyclerViewAdapter rcAdapter = new WallRecyclerViewAdapter(context, mResults, indices, getActivity());
         recyclerView.setAdapter(rcAdapter);
-        SpacesItemDecoration decoration = new SpacesItemDecoration(16);
+        SpacesItemDecoration decoration = new SpacesItemDecoration(5);
         recyclerView.addItemDecoration(decoration);
     }
 }

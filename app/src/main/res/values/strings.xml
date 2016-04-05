@@ -9,5 +9,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Start typing something for live search</string>
+    <string name="quote_count">Quote Count</string>
+    <string name="number_count">Number Count</string>
 </resources>
 

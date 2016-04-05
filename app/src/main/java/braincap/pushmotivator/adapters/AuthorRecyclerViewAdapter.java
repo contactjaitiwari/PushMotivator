@@ -3,6 +3,7 @@ package braincap.pushmotivator.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             super(itemView);
             mAuthor = (TextView) itemView.findViewById(R.id.tv_author);
             mCount = (TextView) itemView.findViewById(R.id.tv_count);
+            Log.d(TAG, "AuthorHolder: " + itemView.getHeight());
             itemView.setOnClickListener(this);
         }
 
