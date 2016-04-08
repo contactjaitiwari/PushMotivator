@@ -34,8 +34,6 @@ public class MyApplication extends Application {
         RealmConfiguration config0 = new RealmConfiguration.Builder(this).name("default_realm").build();
         Realm.setDefaultConfiguration(config0);
 
-
-
     }
 
     private String copyBundledRealmFile(InputStream inputStream, String outFileName) {

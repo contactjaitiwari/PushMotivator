@@ -9,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import braincap.pushmotivator.R;
-import braincap.pushmotivator.beans.Quote;
-import io.realm.RealmResults;
 
 /**
  * Created by Jai on 3/9/2016.
@@ -24,17 +21,14 @@ import io.realm.RealmResults;
 public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "JT";
-    private Context mContext;
+    private Context context;
     private LayoutInflater mInflater;
-    private RealmResults<Quote> mResults;
-    private List<Integer> mIndices;
+    private ArrayList<String> description;
 
-
-    public WallRecyclerViewAdapter(Context context, RealmResults<Quote> results, List<Integer> indices, FragmentActivity activity) {
-        mContext = context;
+    public WallRecyclerViewAdapter(Context context, ArrayList<String> description, FragmentActivity activity) {
+        this.context = context;
+        this.description = description;
         mInflater = LayoutInflater.from(context);
-        mResults = results;
-        mIndices = indices;
 
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -55,8 +49,7 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     private void shuffleIndex() {
-        Collections.shuffle(mIndices);
-        Toast.makeText(mContext, "Index Shuffled", Toast.LENGTH_SHORT).show();
+        Collections.shuffle(description);
     }
 
     @Override
@@ -69,14 +62,20 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof QuoteHolder) {
             QuoteHolder quoteHolder = (QuoteHolder) holder;
-            Quote quote = mResults.get(mIndices.get(position));
-            quoteHolder.mQuote.setText(quote.getPOST_DESCRIPTION());
+            String quote = description.get(position);
+            quoteHolder.mQuote.setText(quote);
         }
     }
 
     @Override
     public int getItemCount() {
-        return mResults.size();
+        return description.size();
+    }
+
+    public void setFilter(ArrayList<String> descriptionNew) {
+        description = new ArrayList<>();
+        description.addAll(descriptionNew);
+        notifyDataSetChanged();
     }
 
     public static class QuoteHolder extends RecyclerView.ViewHolder {

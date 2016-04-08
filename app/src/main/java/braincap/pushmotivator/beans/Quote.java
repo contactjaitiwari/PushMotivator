@@ -1,6 +1,7 @@
 package braincap.pushmotivator.beans;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Jai on 3/12/2016.
@@ -8,6 +9,7 @@ import io.realm.RealmObject;
 public class Quote extends RealmObject {
     private int POST_id;
     private String POST_TITLE;
+    @PrimaryKey
     private String POST_DESCRIPTION;
     private String AUTH_TITLE;
     private String CAT_TITLE;
