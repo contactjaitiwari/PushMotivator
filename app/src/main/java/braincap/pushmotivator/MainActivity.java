@@ -12,7 +12,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 
-public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener {
+public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener, TopicFragment.GiveTopicToActivityListener {
     private static final String TAG = "JT";
 
     public static QuoteWallFragment newInstance(String mAuthorName) {
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
         Button btnWall = (Button) findViewById(R.id.btn_wall);
         Button btnAuth = (Button) findViewById(R.id.btn_auth);
+        Button btnTopic = (Button) findViewById(R.id.btn_topic);
         if (btnWall != null) {
             btnWall.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,6 +71,22 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
             });
         }
 
+        if (btnTopic != null) {
+            btnTopic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    TopicFragment topicFragment = new TopicFragment();
+                    topicFragment.setGiveTopicToActivityListener(MainActivity.this);
+                    fragmentManager.beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.myfrag, topicFragment, "FRAGTOPIC");
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commitAllowingStateLoss();
+                }
+            });
+        }
 
     }
 
@@ -87,6 +104,18 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         QuoteWallFragment quoteWallFragment = newInstance(mAuthorName);
+        fragmentManager.beginTransaction();
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void giveTopicToActivity(String mTopicName) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        QuoteWallFragment quoteWallFragment = newInstance(mTopicName);
         fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
