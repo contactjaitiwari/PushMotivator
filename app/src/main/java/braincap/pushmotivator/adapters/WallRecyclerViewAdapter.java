@@ -1,6 +1,5 @@
 package braincap.pushmotivator.adapters;
 
-import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,20 +14,15 @@ import java.util.Collections;
 
 import braincap.pushmotivator.R;
 
-/**
- * Created by Jai on 3/9/2016.
- */
 public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "JT";
-    private Context context;
     private LayoutInflater mInflater;
     private ArrayList<String> description;
 
-    public WallRecyclerViewAdapter(Context context, ArrayList<String> description, FragmentActivity activity) {
-        this.context = context;
-        this.description = description;
-        mInflater = LayoutInflater.from(context);
+    public WallRecyclerViewAdapter(FragmentActivity activity) {
+        description = new ArrayList<>();
+        mInflater = LayoutInflater.from(activity);
 
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -52,6 +46,7 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         Collections.shuffle(description);
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.quote, parent, false);
@@ -65,6 +60,11 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             String quote = description.get(position);
             quoteHolder.mQuote.setText(quote);
         }
+    }
+
+
+    public void passData(ArrayList<String> description) {
+        this.description = description;
     }
 
     @Override

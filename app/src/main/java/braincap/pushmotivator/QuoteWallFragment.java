@@ -4,7 +4,6 @@ package braincap.pushmotivator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Process;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,29 +47,28 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     private ArrayList<String> description;
     Thread realmToArray = new Thread(new Runnable() {
         public void run() {
-            android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
             RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
             mRealm = Realm.getInstance(config0);
             if (mAuthorNameReceived != null) {
                 mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mAuthorNameReceived).findAll();
-                Log.d(TAG, "Fragment Wall: Limited rows fetched");
             } else {
                 mResults = mRealm.where(Quote.class).findAll();
-                Log.d(TAG, "Fragment Wall: All rows fetched");
             }
             for (int i = 0; i < mResults.size(); i++) {
                 description.add(mResults.get(i).getPOST_DESCRIPTION());
             }
-
             Collections.shuffle(description);
-
+            rcAdapter.passData(description);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    rcAdapter.notifyDataSetChanged();
+                }
+            });
         }
-
-
     });
 
     public QuoteWallFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -79,16 +76,8 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mAuthorNameReceived = getArguments().getString("1", null);
-            Log.d(TAG, "onCreate: " + mAuthorNameReceived);
         }
-        Log.d(TAG, "onCreate: ");
         description = new ArrayList<>();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -97,7 +86,6 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         context = getActivity();
         realmToArray.start();
         setHasOptionsMenu(true);
-        Log.d(TAG, "onCreateView: ");
         return inflater.inflate(R.layout.fragment_quote_wall, container, false);
     }
 
@@ -105,7 +93,6 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) context.findViewById(R.id.recycler_view);
-
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +120,7 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        rcAdapter = new WallRecyclerViewAdapter(context, description, getActivity());
-        Log.d(TAG, "onViewCreated: ADAPTER CREATED");
+        rcAdapter = new WallRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(rcAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(5);
         recyclerView.addItemDecoration(decoration);
@@ -146,8 +132,8 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         d.setContentView(R.layout.number_picker);
         Button b1 = (Button) d.findViewById(R.id.startButton);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker);
-        np.setMaxValue(10); // max value 100
-        np.setMinValue(0);   // min value 0
+        np.setMaxValue(10);
+        np.setMinValue(0);
         np.setWrapSelectorWheel(false);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +192,7 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         }
         return filteredModelList;
     }
+
 }
 
 
