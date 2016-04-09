@@ -13,11 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.stetho.Stetho;
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
-
-import java.util.regex.Pattern;
-
 import braincap.pushmotivator.adapters.AuthorRecyclerViewAdapter;
 import braincap.pushmotivator.adapters.SpacesItemDecoration;
 import braincap.pushmotivator.beans.Author;
@@ -46,19 +41,6 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = getActivity();
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(context)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(context))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(context).build())
-                        .build());
-
-        RealmInspectorModulesProvider.builder(context)
-                .withFolder(context.getCacheDir())
-                .withMetaTables()
-                .withDescendingOrder()
-                .withLimit(1000)
-                .databaseNamePattern(Pattern.compile(".+\\.realm"))
-                .build();
 
         RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
         mRealm = Realm.getInstance(config0);

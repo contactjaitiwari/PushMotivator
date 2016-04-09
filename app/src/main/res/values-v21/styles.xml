@@ -6,14 +6,14 @@
     </style>
 
     <style name="MyButton" parent="Theme.AppCompat.Light">
-        <item name="android:colorControlHighlight">#40C9A2</item>
-        <item name="android:colorButtonNormal">@color/lightColor</item>
+        <item name="android:colorControlHighlight">@color/primary_dark</item>
+        <item name="android:colorButtonNormal">@color/primary</item>
     </style>
 
 
     <style name="MyButton.Wall" parent="MyButton">
-        <item name="android:colorControlHighlight">#FF715B</item>
-        <item name="android:colorButtonNormal">#FF6B6B</item>
+        <item name="android:colorControlHighlight">@color/primary_dark</item>
+        <item name="android:colorButtonNormal">@color/primary</item>
     </style>
 
 

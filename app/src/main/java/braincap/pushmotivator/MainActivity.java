@@ -8,11 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.facebook.stetho.Stetho;
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
-
-import java.util.regex.Pattern;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -75,20 +70,6 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
             });
         }
 
-
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-                        .build());
-
-        RealmInspectorModulesProvider.builder(this)
-                .withFolder(getCacheDir())
-                .withMetaTables()
-                .withDescendingOrder()
-                .withLimit(1000)
-                .databaseNamePattern(Pattern.compile(".+\\.realm"))
-                .build();
 
     }
 

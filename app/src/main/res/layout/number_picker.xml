@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
-        android:background="@color/darkColor"
+        android:background="@color/primary"
         android:descendantFocusability="blocksDescendants"
-        android:solidColor="@color/darkColor"
+        android:solidColor="@color/primary"
         android:theme="@style/NumberPickerTextColorStyle" />
 
     <Button
@@ -25,11 +25,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
-        android:background="@color/lightColor"
+        android:background="@color/primary_light"
         android:padding="10dp"
         android:text="Start Pushing"
-        android:textColor="#000000"
-
+        android:textColor="@android:color/black"
         />
 
 </RelativeLayout>

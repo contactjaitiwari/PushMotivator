@@ -20,13 +20,11 @@ import io.realm.RealmResults;
 public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "JT";
-    private Context mContext;
     private LayoutInflater mInflater;
     private RealmResults<Author> mResults;
     private OnAuthorSelectedListener onAuthorSelectedListener;
 
     public AuthorRecyclerViewAdapter(Context context, Realm realm, RealmResults<Author> results, Activity activity) {
-        mContext = context;
         mInflater = LayoutInflater.from(context);
         mResults = results;
     }

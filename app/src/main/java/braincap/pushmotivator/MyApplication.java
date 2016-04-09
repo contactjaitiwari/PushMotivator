@@ -1,39 +1,69 @@
 package braincap.pushmotivator;
 
 import android.app.Application;
-
-import com.facebook.stetho.Stetho;
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
+import android.content.Context;
+import android.os.Process;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
+import braincap.pushmotivator.beans.Quote;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by Jai on 3/21/2016.
  */
 public class MyApplication extends Application {
     private static final String TAG = "JT";
+    public static ArrayList<String> description = new ArrayList<>();
+    private static Application sApplication;
+    static Thread realmToArray = new Thread(new Runnable() {
+        public void run() {
+            android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+            RealmConfiguration config0 = new RealmConfiguration.Builder(MyApplication.getContext()).name("default_realm").build();
+            Realm mRealm = Realm.getInstance(config0);
+            RealmResults<Quote> mResults = mRealm.where(Quote.class).findAll();
+            Log.d(TAG, "run: " + mResults.size());
+            Log.d(TAG, "run: Start Loop");
+            for (int i = 0; i < mResults.size(); i++) {
+                description.add(mResults.get(i).getPOST_DESCRIPTION());
+            }
+            Collections.shuffle(description);
+            Log.d(TAG, "run: " + description.size());
+        }
+    });
 
+    public static ArrayList<String> getDescription() {
+        if (description.size() == 0) {
+            realmToArray.run();
+        }
+        return description;
+    }
+
+    public static Application getApplication() {
+        return sApplication;
+    }
+
+    public static Context getContext() {
+        return getApplication().getApplicationContext();
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-                        .build());
-
+        sApplication = this;
+        Log.d(TAG, "MyApplication onCreate: ");
         copyBundledRealmFile(this.getResources().openRawResource(R.raw.default_realm), "default_realm");
         RealmConfiguration config0 = new RealmConfiguration.Builder(this).name("default_realm").build();
         Realm.setDefaultConfiguration(config0);
-
+        realmToArray.start();
     }
 
     private String copyBundledRealmFile(InputStream inputStream, String outFileName) {
@@ -52,30 +82,4 @@ public class MyApplication extends Application {
         }
         return null;
     }
-
 }
-
-
-//mRealm = Realm.getDefaultInstance();
-//AssetManager assetManager = getResources().getAssets();
-
-        /*Creating database from file
-        InputStream is = null;
-        try {
-            is = assetManager.open("all_quotes.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d(TAG, "onCreate: File not found");
-        }
-
-        mRealm.beginTransaction();
-        try {
-            mRealm.createAllFromJson(Quote.class, is);
-            mRealm.commitTransaction();
-            Log.d(TAG, "onCreate: Transaction committed!");
-            Log.d(TAG, "path: " + mRealm.getPath());
-        } catch (IOException e) {
-            mRealm.cancelTransaction();
-            Log.d(TAG, "onCreate: Transaction cancelled!");
-        }
-        */

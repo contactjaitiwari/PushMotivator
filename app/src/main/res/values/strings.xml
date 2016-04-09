@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Push Motivator</string>
-    <string name="tv_filter_title">Push quotes by</string>
+    <string name="tv_filter_title">Quotes by</string>
     <string name="btn_topic">Topic</string>
     <string name="btn_author">Author</string>
     <string name="btn_quote_wall">Quote Wall</string>
@@ -11,5 +11,6 @@
     <string name="search_hint">Start typing something for live search</string>
     <string name="quote_count">Quote Count</string>
     <string name="number_count">Number Count</string>
+    <string name="author">Author</string>
 </resources>
 

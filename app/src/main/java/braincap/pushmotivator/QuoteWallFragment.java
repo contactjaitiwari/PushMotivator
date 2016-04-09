@@ -13,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,15 +48,18 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     private ArrayList<String> description;
     Thread realmToArray = new Thread(new Runnable() {
         public void run() {
-            RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
-            mRealm = Realm.getInstance(config0);
             if (mAuthorNameReceived != null) {
+                RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
+                mRealm = Realm.getInstance(config0);
                 mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mAuthorNameReceived).findAll();
-            } else {
-                mResults = mRealm.where(Quote.class).findAll();
+                Log.d(TAG, "run: Start Loop");
+                for (int i = 0; i < mResults.size(); i++) {
+                    description.add(mResults.get(i).getPOST_DESCRIPTION());
+                }
             }
-            for (int i = 0; i < mResults.size(); i++) {
-                description.add(mResults.get(i).getPOST_DESCRIPTION());
+            if (mAuthorNameReceived == null) {
+                description = MyApplication.getDescription();
+                Log.d(TAG, "run: Call " + description.size());
             }
             Collections.shuffle(description);
             rcAdapter.passData(description);
@@ -66,7 +70,9 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
                 }
             });
         }
-    });
+    }
+
+    );
 
     public QuoteWallFragment() {
     }
@@ -84,7 +90,6 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         context = getActivity();
-        realmToArray.start();
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_quote_wall, container, false);
     }
@@ -122,6 +127,7 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         rcAdapter = new WallRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(rcAdapter);
+        realmToArray.start();
         SpacesItemDecoration decoration = new SpacesItemDecoration(5);
         recyclerView.addItemDecoration(decoration);
     }
