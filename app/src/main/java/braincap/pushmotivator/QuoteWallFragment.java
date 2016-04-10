@@ -43,21 +43,26 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     Realm mRealm;
     RealmResults<Quote> mResults;
     Activity context;
-    String mAuthorNameReceived;
+    String mFilterInputReceived;
+    String mFilterInputType;
     WallRecyclerViewAdapter rcAdapter;
     private ArrayList<String> description;
     Thread realmToArray = new Thread(new Runnable() {
         public void run() {
-            if (mAuthorNameReceived != null) {
+            if (mFilterInputType != null) {
                 RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
                 mRealm = Realm.getInstance(config0);
-                mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mAuthorNameReceived).findAll();
+                if (mFilterInputType == "AUTHOR") {
+                    mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mFilterInputReceived).findAll();
+                } else if (mFilterInputType == "TOPIC") {
+                    mResults = mRealm.where(Quote.class).equalTo("CAT_TITLE", mFilterInputReceived).findAll();
+                }
                 Log.d(TAG, "run: Start Loop");
                 for (int i = 0; i < mResults.size(); i++) {
                     description.add(mResults.get(i).getPOST_DESCRIPTION());
                 }
             }
-            if (mAuthorNameReceived == null) {
+            if (mFilterInputReceived == null) {
                 description = MyApplication.getDescription();
                 Log.d(TAG, "run: Call " + description.size());
             }
@@ -70,9 +75,8 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
                 }
             });
         }
-    }
+    });
 
-    );
 
     public QuoteWallFragment() {
     }
@@ -81,7 +85,13 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mAuthorNameReceived = getArguments().getString("1", null);
+            if (getArguments().getString("AUTHOR") != null) {
+                mFilterInputType = "AUTHOR";
+                mFilterInputReceived = getArguments().getString("AUTHOR", null);
+            } else if (getArguments().getString("TOPIC") != null) {
+                mFilterInputType = "TOPIC";
+                mFilterInputReceived = getArguments().getString("TOPIC", null);
+            }
         }
         description = new ArrayList<>();
     }

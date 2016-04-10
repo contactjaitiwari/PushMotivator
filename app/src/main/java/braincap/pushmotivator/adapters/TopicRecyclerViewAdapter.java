@@ -67,13 +67,13 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             mTopic = (TextView) itemView.findViewById(R.id.tv_topic);
             mCount = (TextView) itemView.findViewById(R.id.tv_count);
-            Log.d(TAG, "TopicHolder: " + itemView.getHeight());
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (onTopicSelectedListener != null) {
+                Log.d(TAG, "onClick: ");
                 onTopicSelectedListener.onTopicSelected(itemView);
             }
         }

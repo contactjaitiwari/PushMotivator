@@ -12,5 +12,6 @@
     <string name="quote_count">Quote Count</string>
     <string name="number_count">Number Count</string>
     <string name="author">Author</string>
+    <string name="backup">Backup</string>
 </resources>
 
