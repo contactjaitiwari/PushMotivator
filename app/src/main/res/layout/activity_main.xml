@@ -17,11 +17,9 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:background="@drawable/text_banner"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/tv_filter_title"
@@ -37,65 +35,39 @@
                 android:layout_marginTop="50dp"
                 android:baselineAligned="false"
                 android:minHeight="100dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:orientation="horizontal">
 
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
                     android:layout_weight="1">
 
-
-                    <ImageView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:background="@color/accent"
-                        android:contentDescription="@string/backup" />
+                        android:fontFamily="sans-serif-black"
+                        android:gravity="center_horizontal|bottom"
+                        android:text="@string/topic"
+                        android:textAllCaps="false"
+                        android:textColor="@color/primary_dark"
+                        android:textSize="50sp"
+                        android:textStyle="italic" />
 
                     <ImageButton
                         android:id="@+id/btn_topic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:background="@color/accent"
                         android:contentDescription="@string/btn_topic"
                         android:text="@string/btn_topic"
+
                         android:textColor="@color/icons" />
 
 
                 </FrameLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/accent"
-                        android:contentDescription="@string/backup" />
-
-                    <ImageButton
-                        android:id="@+id/btn_auth"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/accent"
-                        android:contentDescription="@string/btn_author"
-                        android:text="@string/btn_author"
-                        android:textColor="@color/icons" />
-
-
-                </RelativeLayout>
-
 
                 <FrameLayout
                     android:layout_width="0dp"
@@ -103,30 +75,55 @@
                     android:layout_weight="1">
 
 
-                    <ImageView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:background="@color/accent"
-                        android:contentDescription="@string/backup" />
+                        android:fontFamily="sans-serif-black"
+                        android:gravity="center_horizontal|bottom"
+                        android:text="@string/author"
+                        android:textAllCaps="false"
+                        android:textColor="@color/primary_dark"
+                        android:textSize="50sp"
+                        android:textStyle="italic" />
 
                     <ImageButton
-                        android:id="@+id/btn_wall"
+                        android:id="@+id/btn_auth"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:background="@color/accent"
-                        android:contentDescription="@string/btn_quote_wall"
-                        android:text="@string/btn_quote_wall"
+                        android:contentDescription="@string/btn_author"
+                        android:text="@string/btn_author"
                         android:textColor="@color/icons" />
-
 
                 </FrameLayout>
 
-
             </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="50dp"
+                android:minHeight="100dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/accent"
+                    android:contentDescription="@string/backup" />
+
+                <ImageButton
+                    android:id="@+id/btn_wall"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/accent"
+                    android:contentDescription="@string/btn_quote_wall"
+                    android:text="@string/btn_quote_wall"
+                    android:textColor="@color/icons" />
+
+            </FrameLayout>
 
         </LinearLayout>
 

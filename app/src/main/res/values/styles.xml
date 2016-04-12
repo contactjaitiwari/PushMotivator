@@ -11,6 +11,7 @@
         <!-- colorAccent is used as the default_realm value for colorControlActivated
              which is used to tint widgets -->
         <item name="colorAccent">@color/accent</item>
+        <item name="android:fontFamily">sans-serif</item>
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight & colorSwitchThumbNormal. -->
     </style>
@@ -22,6 +23,11 @@
 
     <style name="NumberPickerTextColorStyle">
         <item name="android:textColorPrimary">@color/primary</item>
+    </style>
+
+    <style name="font_style">
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
 </resources>

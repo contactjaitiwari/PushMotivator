@@ -53,14 +53,12 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //TODO: Add ripple in Wall Button
 
         outAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         inAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadein);
         outAnimationTopic = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         inAnimationTopic = AnimationUtils.loadAnimation(this, R.anim.fadein);
-
 
         RealmConfiguration configuration = new RealmConfiguration.Builder(this).build();
         Realm.setDefaultConfiguration(configuration);
@@ -84,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
         btnWall = (ImageButton) findViewById(R.id.btn_wall);
         btnAuth = (ImageButton) findViewById(R.id.btn_auth);
+        btnAuth.setColorFilter(R.color.light);
         btnTopic = (ImageButton) findViewById(R.id.btn_topic);
 
         Glide.with(this).load(authorImageIds.get(0)).fitCenter().into(btnAuth);
@@ -150,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
                 }
             });
         }
-
     }
 
     private void updateAuthButtonImage() {
