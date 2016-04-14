@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
@@ -20,17 +21,20 @@ import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener, TopicFragment.GiveTopicToActivityListener {
-    private static final long FLIP_DELAY = 3000;
+    private static final long FLIP_DELAY = 5000;
     private static final String TAG = "JT";
-    ImageButton btnWall;
-    ImageButton btnAuth;
-    ImageButton btnTopic;
+    Button btnTopic;
+    Button btnAuthor;
+    Button btnWall;
     ArrayList<Integer> authorImageIds;
     ArrayList<Integer> topicImageIds;
     Animation outAnimationAuth;
     Animation inAnimationAuth;
     Animation outAnimationTopic;
     Animation inAnimationTopic;
+    ImageView ivTopic;
+    ImageView ivAuthor;
+    ImageView ivWall;
 
     public static QuoteWallFragment newInstance(String inputType, String inputName) {
         QuoteWallFragment quoteWallFragment = new QuoteWallFragment();
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     @Override
     protected void onPause() {
         super.onPause();
-        btnAuth.removeCallbacks(null);
+        btnAuthor.removeCallbacks(null);
         btnTopic.removeCallbacks(null);
     }
 
@@ -80,21 +84,23 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         topicImageIds.add(R.drawable.img_topic_7);
         topicImageIds.add(R.drawable.img_topic_8);
 
-        btnWall = (ImageButton) findViewById(R.id.btn_wall);
-        btnAuth = (ImageButton) findViewById(R.id.btn_auth);
-        btnAuth.setColorFilter(R.color.light);
-        btnTopic = (ImageButton) findViewById(R.id.btn_topic);
+        btnWall = (Button) findViewById(R.id.btn_wall);
+        btnAuthor = (Button) findViewById(R.id.btn_author);
+        btnTopic = (Button) findViewById(R.id.btn_topic);
 
-        Glide.with(this).load(authorImageIds.get(0)).fitCenter().into(btnAuth);
-        Glide.with(this).load(topicImageIds.get(0)).fitCenter().into(btnTopic);
-        Glide.with(this).load(R.drawable.img_wall).centerCrop().into(btnWall);
+        ivTopic = (ImageView) findViewById(R.id.iv_topic);
+        ivAuthor = (ImageView) findViewById(R.id.iv_author);
+        ivWall = (ImageView) findViewById(R.id.iv_wall);
 
+        Glide.with(this).load(topicImageIds.get(0)).fitCenter().into(ivTopic);
+        Glide.with(this).load(authorImageIds.get(0)).fitCenter().into(ivAuthor);
+        Glide.with(this).load(R.drawable.img_wall).centerCrop().into(ivWall);
 
-        btnAuth.postDelayed(new Runnable() {
+        btnTopic.postDelayed(new Runnable() {
             @Override
             public void run() {
                 updateAuthButtonImage();
-                btnAuth.postDelayed(this, FLIP_DELAY);
+                btnTopic.postDelayed(this, FLIP_DELAY);
             }
         }, FLIP_DELAY);
 
@@ -116,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         }
 
 
-        if (btnAuth != null) {
-            btnAuth.setOnClickListener(new View.OnClickListener() {
+        if (btnAuthor != null) {
+            btnAuthor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -166,15 +172,15 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    Glide.with(MyApplication.getContext()).load(authorImageIds.get(0)).fitCenter().dontAnimate().into(btnAuth);
-                    btnAuth.startAnimation(inAnimationAuth);
+                    Glide.with(MyApplication.getContext()).load(authorImageIds.get(0)).fitCenter().dontAnimate().into(ivAuthor);
+                    ivAuthor.startAnimation(inAnimationAuth);
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
                 }
             });
-            btnAuth.startAnimation(outAnimationAuth);
+            ivAuthor.startAnimation(outAnimationAuth);
 
             Collections.shuffle(topicImageIds);
             while (prevTopicId == topicImageIds.get(0)) {
@@ -187,15 +193,15 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    Glide.with(MyApplication.getContext()).load(topicImageIds.get(0)).fitCenter().dontAnimate().into(btnTopic);
-                    btnTopic.startAnimation(inAnimationTopic);
+                    Glide.with(MyApplication.getContext()).load(topicImageIds.get(0)).fitCenter().dontAnimate().into(ivTopic);
+                    ivTopic.startAnimation(inAnimationTopic);
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
                 }
             });
-            btnTopic.startAnimation(outAnimationTopic);
+            ivTopic.startAnimation(outAnimationTopic);
 
         } catch (IllegalArgumentException e) {
             e.toString();

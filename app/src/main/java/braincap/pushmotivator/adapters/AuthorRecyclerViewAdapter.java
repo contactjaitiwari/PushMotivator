@@ -1,18 +1,16 @@
 package braincap.pushmotivator.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import braincap.pushmotivator.R;
 import braincap.pushmotivator.beans.Author;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by Jai on 4/2/2016.
@@ -21,12 +19,12 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     private static final String TAG = "JT";
     private LayoutInflater mInflater;
-    private RealmResults<Author> mResults;
+    private ArrayList<Author> authorList;
     private OnAuthorSelectedListener onAuthorSelectedListener;
 
-    public AuthorRecyclerViewAdapter(Context context, Realm realm, RealmResults<Author> results, Activity activity) {
+    public AuthorRecyclerViewAdapter(Context context, ArrayList<Author> author) {
         mInflater = LayoutInflater.from(context);
-        mResults = results;
+        authorList = author;
     }
 
 
@@ -40,7 +38,7 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof AuthorHolder) {
             AuthorHolder authorHolder = (AuthorHolder) holder;
-            Author author = mResults.get(position);
+            Author author = authorList.get(position);
             authorHolder.mAuthor.setText(author.getAUTH_NAME());
             authorHolder.mCount.setText(author.getCOUNT() + "");
         }
@@ -52,7 +50,13 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        return mResults.size();
+        return authorList.size();
+    }
+
+    public void setFilter(ArrayList<Author> authorListNew) {
+        authorList = new ArrayList<>();
+        authorList.addAll(authorListNew);
+        notifyDataSetChanged();
     }
 
     public interface OnAuthorSelectedListener {
@@ -67,7 +71,6 @@ public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             super(itemView);
             mAuthor = (TextView) itemView.findViewById(R.id.tv_author);
             mCount = (TextView) itemView.findViewById(R.id.tv_count);
-            Log.d(TAG, "AuthorHolder: " + itemView.getHeight());
             itemView.setOnClickListener(this);
         }
 
