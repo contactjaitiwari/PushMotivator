@@ -1,6 +1,5 @@
 package braincap.pushmotivator;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,11 +43,10 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Author tempAuthor = new Author();
+        Author tempAuthor;
         authorList = new ArrayList<>();
         context = getActivity();
 

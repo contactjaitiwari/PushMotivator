@@ -25,7 +25,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
-        android:background="@color/primary_light"
+        android:background="@color/primary"
         android:padding="10dp"
         android:text="Start Pushing"
         android:textColor="@android:color/black"

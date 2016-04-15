@@ -17,12 +17,23 @@ import braincap.pushmotivator.R;
 public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "JT";
+    ArrayList<Integer> colorIds = new ArrayList<>();
     private LayoutInflater mInflater;
     private ArrayList<String> description;
 
     public WallRecyclerViewAdapter(FragmentActivity activity) {
         description = new ArrayList<>();
         mInflater = LayoutInflater.from(activity);
+        colorIds.add(R.color.col1);
+        colorIds.add(R.color.col2);
+        colorIds.add(R.color.col3);
+        colorIds.add(R.color.col4);
+        colorIds.add(R.color.col5);
+        colorIds.add(R.color.col6);
+        colorIds.add(R.color.col7);
+        colorIds.add(R.color.col8);
+        colorIds.add(R.color.col9);
+
 
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -78,12 +89,14 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         notifyDataSetChanged();
     }
 
-    public static class QuoteHolder extends RecyclerView.ViewHolder {
+    public class QuoteHolder extends RecyclerView.ViewHolder {
         TextView mQuote;
 
         public QuoteHolder(View itemView) {
             super(itemView);
             mQuote = (TextView) itemView.findViewById(R.id.tv_quote);
+            Collections.shuffle(colorIds);
+            mQuote.setBackgroundColor(itemView.getResources().getColor(colorIds.get(0)));
         }
     }
 }

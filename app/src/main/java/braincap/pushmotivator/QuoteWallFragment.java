@@ -167,6 +167,7 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
 
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.clearFocus();
         searchView.setOnQueryTextListener(this);
 
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
