@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,7 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
     RealmResults<Author> mResultsAuth;
     Activity context;
     AuthorRecyclerViewAdapter rcAdapter;
+    SearchView searchView;
     private ArrayList<Author> authorList;
     private GiveAuthorToActivityListener giveAuthorToActivityListener;
 
@@ -94,8 +96,8 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         menu.clear();
         inflater.inflate(R.menu.menu_search, menu);
 
-        final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
 
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
@@ -138,7 +140,17 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         return filteredModelList;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, String.format("onDestroyView(%s)", this));
+        searchView.setOnQueryTextListener(null);
+        searchView.setQuery("", true);
+        searchView.setIconified(true);
+    }
+
     public interface GiveAuthorToActivityListener {
         void giveAuthorToActivity(String mAuthorName);
     }
+
 }

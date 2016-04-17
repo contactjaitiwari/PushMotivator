@@ -53,11 +53,17 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent() != null && getIntent().hasExtra("Quote") && getIntent().hasExtra("Author")) {
+            onQuoteClicked(getIntent().getStringExtra("Quote"), getIntent().getStringExtra("Author"));
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //TODO: Add ripple in Wall Button
 
         outAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         inAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadein);
@@ -120,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
                 }
             });
         }
-
 
         if (btnAuthor != null) {
             btnAuthor.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +246,15 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    public void onQuoteClicked(String quote, String author) {
+        Log.d(TAG, "onQuoteClicked: " + quote);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        QuoteDetailsFragment quoteDetailsFragment = new QuoteDetailsFragment();
+        quoteDetailsFragment.setQuote(quote);
+        quoteDetailsFragment.setAuthor(author);
+        quoteDetailsFragment.show(fragmentManager, "QUOTEDETAILSFRAG");
     }
 
 }

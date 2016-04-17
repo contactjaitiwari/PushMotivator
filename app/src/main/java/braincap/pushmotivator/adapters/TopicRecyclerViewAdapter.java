@@ -1,6 +1,5 @@
 package braincap.pushmotivator.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import braincap.pushmotivator.R;
 import braincap.pushmotivator.beans.Topic;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -24,7 +22,7 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private RealmResults<Topic> mResults;
     private OnTopicSelectedListener onTopicSelectedListener;
 
-    public TopicRecyclerViewAdapter(Context context, Realm realm, RealmResults<Topic> results, Activity activity) {
+    public TopicRecyclerViewAdapter(Context context, RealmResults<Topic> results) {
         mInflater = LayoutInflater.from(context);
         mResults = results;
     }

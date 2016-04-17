@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/text_banner"
+    android:padding="20dp"
+    tools:context="braincap.pushmotivator.QuoteDetailsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tv_quote_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quote"
+        android:textColor="@color/primary"
+        android:textSize="17sp" />
+
+    <View
+        android:id="@+id/vw_margin"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tv_quote_text"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/dialog_divider" />
+
+    <TextView
+        android:id="@+id/tv_author_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vw_margin"
+        android:gravity="end|bottom"
+        android:text="Author"
+        android:textColor="@color/primary"
+        android:textSize="15sp" />
+
+</RelativeLayout>

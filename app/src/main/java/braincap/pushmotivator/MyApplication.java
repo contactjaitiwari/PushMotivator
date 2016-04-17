@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import braincap.pushmotivator.beans.Quote;
+import braincap.pushmotivator.beans.ResultQuote;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -22,7 +23,7 @@ import io.realm.RealmResults;
  */
 public class MyApplication extends Application {
     private static final String TAG = "JT";
-    public static ArrayList<String> description = new ArrayList<>();
+    public static ArrayList<ResultQuote> description = new ArrayList<>();
     private static Application sApplication;
     static Thread realmToArray = new Thread(new Runnable() {
         public void run() {
@@ -33,14 +34,14 @@ public class MyApplication extends Application {
             Log.d(TAG, "run: " + mResults.size());
             Log.d(TAG, "run: Start Loop");
             for (int i = 0; i < mResults.size(); i++) {
-                description.add(mResults.get(i).getPOST_DESCRIPTION());
+                description.add(new ResultQuote(mResults.get(i).getPOST_DESCRIPTION(), mResults.get(i).getAUTH_TITLE()));
             }
             Collections.shuffle(description);
             Log.d(TAG, "run: " + description.size());
         }
     });
 
-    public static ArrayList<String> getDescription() {
+    public static ArrayList<ResultQuote> getDescription() {
         if (description.size() == 0) {
             realmToArray.run();
         }

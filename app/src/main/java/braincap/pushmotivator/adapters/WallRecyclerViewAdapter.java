@@ -13,13 +13,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import braincap.pushmotivator.R;
+import braincap.pushmotivator.beans.ResultQuote;
 
 public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "JT";
+    public QuoteClickListener quoteClickListener;
     ArrayList<Integer> colorIds = new ArrayList<>();
+    String quote;
+    String author;
     private LayoutInflater mInflater;
-    private ArrayList<String> description;
+    private ArrayList<ResultQuote> description;
 
     public WallRecyclerViewAdapter(FragmentActivity activity) {
         description = new ArrayList<>();
@@ -68,13 +72,18 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof QuoteHolder) {
             QuoteHolder quoteHolder = (QuoteHolder) holder;
-            String quote = description.get(position);
+            quote = description.get(position).getPOST_DESCRIPTION();
+            author = description.get(position).getAUTH_TITLE();
             quoteHolder.mQuote.setText(quote);
+            quoteHolder.mAuthor.setText(author);
         }
     }
 
+    public void setQuoteClickListener(QuoteClickListener quoteClickListener) {
+        this.quoteClickListener = quoteClickListener;
+    }
 
-    public void passData(ArrayList<String> description) {
+    public void passData(ArrayList<ResultQuote> description) {
         this.description = description;
     }
 
@@ -83,20 +92,33 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         return description.size();
     }
 
-    public void setFilter(ArrayList<String> descriptionNew) {
+    public void setFilter(ArrayList<ResultQuote> descriptionNew) {
         description = new ArrayList<>();
         description.addAll(descriptionNew);
         notifyDataSetChanged();
     }
 
-    public class QuoteHolder extends RecyclerView.ViewHolder {
+    public interface QuoteClickListener {
+        void onQuoteClicked(String quote, String author);
+    }
+
+    public class QuoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mQuote;
+        TextView mAuthor;
 
         public QuoteHolder(View itemView) {
             super(itemView);
             mQuote = (TextView) itemView.findViewById(R.id.tv_quote);
+            mAuthor = (TextView) itemView.findViewById(R.id.tv_author);
             Collections.shuffle(colorIds);
             mQuote.setBackgroundColor(itemView.getResources().getColor(colorIds.get(0)));
+            mQuote.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            quoteClickListener.onQuoteClicked((String) mQuote.getText(), (String) mAuthor.getText());
         }
     }
+
 }

@@ -17,7 +17,6 @@ import braincap.pushmotivator.beans.Author;
  */
 public class AuthorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = "JT";
     private LayoutInflater mInflater;
     private ArrayList<Author> authorList;
     private OnAuthorSelectedListener onAuthorSelectedListener;

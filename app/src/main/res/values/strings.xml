@@ -6,7 +6,6 @@
     <string name="btn_quote_wall">Quote Wall</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Start typing something for live search</string>
     <string name="quote_count">Quote Count</string>

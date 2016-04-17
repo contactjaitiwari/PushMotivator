@@ -53,7 +53,7 @@ public class TopicFragment extends Fragment implements TopicRecyclerViewAdapter.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        TopicRecyclerViewAdapter rcAdapter = new TopicRecyclerViewAdapter(context, null, mResultsTopic, context);
+        TopicRecyclerViewAdapter rcAdapter = new TopicRecyclerViewAdapter(context, mResultsTopic);
         rcAdapter.setOnTopicSelectedListener(this);
         recyclerView.setAdapter(rcAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
