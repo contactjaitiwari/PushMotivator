@@ -59,8 +59,10 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
                 mRealm = Realm.getInstance(config0);
                 if (mFilterInputType == "AUTHOR") {
                     mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mFilterInputReceived).findAll();
+                    mRealm.close();
                 } else if (mFilterInputType == "TOPIC") {
                     mResults = mRealm.where(Quote.class).equalTo("CAT_TITLE", mFilterInputReceived).findAll();
+                    mRealm.close();
                 }
                 Log.d(TAG, "run: Start Loop");
                 for (int i = 0; i < mResults.size(); i++) {
@@ -146,23 +148,26 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         realmToArray.start();
         SpacesItemDecoration decoration = new SpacesItemDecoration(5);
         recyclerView.addItemDecoration(decoration);
-//        Log.d(TAG, "onViewCreated: " + description.get(0));
     }
 
     private void show() {
         final Dialog d = new Dialog(context);
         d.setTitle("NumberPicker");
         d.setContentView(R.layout.number_picker);
-        Button b1 = (Button) d.findViewById(R.id.startButton);
+        final Button b1 = (Button) d.findViewById(R.id.startButton);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker);
         np.setMaxValue(10);
-        np.setMinValue(0);
+        np.setMinValue(1);
         np.setWrapSelectorWheel(false);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                d.dismiss();
+                MyApplication.writeViewVisibility(View.VISIBLE);
                 Intent intent = new Intent(context, NotifierService.class);
                 intent.putParcelableArrayListExtra("list", mFilterInputType != null ? description : new ArrayList<>(description.subList(0, 999)));
+                intent.putExtra("hours", np.getValue());
+                Log.d(TAG, "onClick: " + np.getValue() + "");
                 context.startService(intent);
             }
         });
@@ -225,6 +230,7 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         quoteDetailsFragment.setAuthor(author);
         quoteDetailsFragment.show(fragmentManager, "QUOTEDETAILSFRAG");
     }
+
 }
 
 

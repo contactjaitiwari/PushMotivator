@@ -1,5 +1,7 @@
 package braincap.pushmotivator;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,11 +18,18 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import braincap.pushmotivator.notifier.NotifierService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 
-public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener, TopicFragment.GiveTopicToActivityListener {
+public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener
+        , TopicFragment.GiveTopicToActivityListener
+        , View.OnClickListener
+//        , FragmentManager.OnBackStackChangedListener
+
+
+{
     private static final long FLIP_DELAY = 5000;
     private static final String TAG = "JT";
     Button btnTopic;
@@ -35,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     ImageView ivTopic;
     ImageView ivAuthor;
     ImageView ivWall;
+    Button stopButton;
+    FragmentManager fragmentManager;
 
     public static QuoteWallFragment newInstance(String inputType, String inputName) {
         QuoteWallFragment quoteWallFragment = new QuoteWallFragment();
@@ -55,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: ");
         if (getIntent() != null && getIntent().hasExtra("Quote") && getIntent().hasExtra("Author")) {
             onQuoteClicked(getIntent().getStringExtra("Quote"), getIntent().getStringExtra("Author"));
         }
@@ -64,6 +76,15 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.d(TAG, "onBackStackChanged: LOL");
+            }
+        });
+//        fragmentManager.addOnBackStackChangedListener(this);
 
         outAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         inAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadein);
@@ -97,6 +118,11 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         ivTopic = (ImageView) findViewById(R.id.iv_topic);
         ivAuthor = (ImageView) findViewById(R.id.iv_author);
         ivWall = (ImageView) findViewById(R.id.iv_wall);
+        stopButton = (Button) findViewById(R.id.btn_stop);
+
+        if (stopButton != null) {
+            stopButton.setOnClickListener(this);
+        }
 
         Glide.with(this).load(topicImageIds.get(0)).fitCenter().into(ivTopic);
         Glide.with(this).load(authorImageIds.get(0)).fitCenter().into(ivAuthor);
@@ -115,14 +141,14 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
             btnWall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     QuoteWallFragment quoteWallFragment = new QuoteWallFragment();
-                    fragmentManager.beginTransaction();
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager
+                            .beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .add(R.id.myfrag, quoteWallFragment, "FRAGWALL")
+                            .addToBackStack(null)
+                            .commit();
+                    Log.d(TAG, "onClick: " + fragmentManager.getBackStackEntryCount());
                 }
             });
         }
@@ -131,15 +157,13 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
             btnAuthor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     AuthorFragment authorFragment = new AuthorFragment();
-                    authorFragment.setGiveAuthorToActivityListener(MainActivity.this);
-                    fragmentManager.beginTransaction();
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    fragmentTransaction.replace(R.id.myfrag, authorFragment, "FRAGAUTH");
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager
+                            .beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .add(R.id.myfrag, authorFragment, "FRAGAUTH")
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
         }
@@ -148,19 +172,19 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
             btnTopic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     TopicFragment topicFragment = new TopicFragment();
-                    topicFragment.setGiveTopicToActivityListener(MainActivity.this);
-                    fragmentManager.beginTransaction();
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    fragmentTransaction.replace(R.id.myfrag, topicFragment, "FRAGTOPIC");
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager
+                            .beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .add(R.id.myfrag, topicFragment, "FRAGTOPIC")
+                            .addToBackStack(null)
+                            .commit();
+                    Log.d(TAG, "onClick: " + fragmentManager.getBackStackEntryCount());
                 }
             });
         }
     }
+
 
     private void updateAuthButtonImage() {
         try {
@@ -209,52 +233,60 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
             ivTopic.startAnimation(outAnimationTopic);
 
         } catch (IllegalArgumentException e) {
-            e.toString();
+            e.printStackTrace();
         }
     }
 
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() == 0) {
-            super.onBackPressed();
-        } else {
-            getFragmentManager().popBackStack();
-        }
-    }
 
     @Override
     public void giveAuthorToActivity(String mAuthorName) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         QuoteWallFragment quoteWallFragment = newInstance("AUTHOR", mAuthorName);
-        fragmentManager.beginTransaction();
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentManager
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .add(R.id.myfrag, quoteWallFragment, "FRAGWALL")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void giveTopicToActivity(String mTopicName) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         QuoteWallFragment quoteWallFragment = newInstance("TOPIC", mTopicName);
-        Log.d(TAG, "giveTopicToActivity: " + mTopicName);
-        fragmentManager.beginTransaction();
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.replace(R.id.myfrag, quoteWallFragment, "FRAGWALL");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentManager
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .add(R.id.myfrag, quoteWallFragment, "FRAGWALL")
+                .addToBackStack(null)
+                .commit();
     }
 
     public void onQuoteClicked(String quote, String author) {
         Log.d(TAG, "onQuoteClicked: " + quote);
-        FragmentManager fragmentManager = getSupportFragmentManager();
         QuoteDetailsFragment quoteDetailsFragment = new QuoteDetailsFragment();
         quoteDetailsFragment.setQuote(quote);
         quoteDetailsFragment.setAuthor(author);
         quoteDetailsFragment.show(fragmentManager, "QUOTEDETAILSFRAG");
     }
+
+    @Override
+    public void onClick(View v) {
+//        stopButton.setVisibility(View.GONE);
+//        MyApplication.writeViewVisibility(View.GONE);
+        Log.d(TAG, "onClick: " + fragmentManager.getBackStackEntryCount());
+        PendingIntent.getService(this, 2, new Intent(this, NotifierService.class), PendingIntent.FLAG_UPDATE_CURRENT).cancel();
+    }
+
+    
+
+/*    @Override
+    public void onBackStackChanged() {
+        Log.d(TAG, "onBackStackChanged: ");
+        if (fragmentManager.getBackStackEntryCount() == 0) {
+            Log.d(TAG, "onBackStackChanged: 1");
+            //noinspection ResourceType
+            stopButton.setVisibility(MyApplication.readViewVisibility());
+        }
+    }
+*/
 
 }

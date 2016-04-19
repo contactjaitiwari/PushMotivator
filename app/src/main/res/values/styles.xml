@@ -21,8 +21,18 @@
         <item name="colorButtonNormal">@color/primary</item>
     </style>
 
+    <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/red</item>
+    </style>
+
+
+    <style name="AppTheme.GreenButton" parent="Base.Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/accent</item>
+    </style>
+
     <style name="NumberPickerTextColorStyle">
-        <item name="android:textColorPrimary">@color/primary</item>
+        <item name="android:textColorPrimary">@color/accent</item>
+        <item name="android:textSize">25sp</item>
     </style>
 
     <style name="font_style">

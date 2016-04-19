@@ -43,6 +43,7 @@ public class TopicFragment extends Fragment implements TopicRecyclerViewAdapter.
         RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
         mRealm = Realm.getInstance(config0);
         mResultsTopic = mRealm.where(Topic.class).findAll(); //TODO : GET TOPIC WITH QUOTE COUNT
+        mRealm.close();
         return inflater.inflate(R.layout.fragment_topic, container, false);
     }
 

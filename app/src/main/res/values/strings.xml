@@ -13,5 +13,10 @@
     <string name="author">Author</string>
     <string name="backup">Backup</string>
     <string name="topic">Topic</string>
+    <string name="stop_pushing">Stop Pushing</string>
+    <string name="push_every">Push every</string>
+    <string name="start_pushing">Start Pushing</string>
+    <string name="hour">hour</string>
+    <string name="share_using">Share using</string>
 </resources>
 

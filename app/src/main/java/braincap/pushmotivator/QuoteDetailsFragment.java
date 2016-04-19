@@ -74,7 +74,7 @@ public class QuoteDetailsFragment extends DialogFragment implements View.OnTouch
         sendIntent.putExtra(Intent.EXTRA_TEXT, quote + "\n\n-" + author);
         sendIntent.setType("text/plain");
         Toast.makeText(v.getContext(), "Share it!", Toast.LENGTH_SHORT).show();
-        startActivity(sendIntent);
+        startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.share_using)));
         return false;
     }
 }

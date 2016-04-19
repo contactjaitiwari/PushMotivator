@@ -26,6 +26,7 @@
             android:layout_alignRight="@id/recycler_view"
             android:layout_margin="16dp"
             android:src="@drawable/app_icon"
+            app:backgroundTint="@color/red"
             app:elevation="10dp" />
     </RelativeLayout>
 

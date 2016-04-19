@@ -55,6 +55,7 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         RealmConfiguration config0 = new RealmConfiguration.Builder(context).name("default_realm").build();
         mRealm = Realm.getInstance(config0);
         mResultsAuth = mRealm.where(Author.class).findAll(); //TODO : GET AUTHOR WITH QUOTE COUNT
+        mRealm.close();
         for (int i = 0; i < mResultsAuth.size(); i++) {
             tempAuthor = new Author();
             tempAuthor.setAUTH_NAME(mResultsAuth.get(i).getAUTH_NAME());
