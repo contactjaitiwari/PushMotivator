@@ -2,10 +2,10 @@
 <resources>
     <color name="primary">#26547C</color>
     <color name="light">#FCFCFC</color>
-    <color name="accent">#06D6A0</color>
+    <color name="accent">#80D8FF</color>
     <color name="primary_dark">#303F9F</color>
     <color name="red">#EF476F</color>
-    <color name="col1">#EF476F</color>
+    <color name="col1">#FFA000</color>
     <color name="col2">#FF5722</color>
     <color name="col3">#388E3C</color>
     <color name="col4">#00796B</color>
@@ -14,4 +14,4 @@
     <color name="col7">#512DA8</color>
     <color name="col8">#C2185B</color>
     <color name="col9">#4CAF50</color>
-</resources>
+</resources>a

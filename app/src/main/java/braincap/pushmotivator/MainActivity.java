@@ -1,6 +1,10 @@
 package braincap.pushmotivator;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -25,8 +29,7 @@ import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener
         , TopicFragment.GiveTopicToActivityListener
-        , View.OnClickListener
-//        , FragmentManager.OnBackStackChangedListener
+        , View.OnClickListener, FragmentManager.OnBackStackChangedListener
 
 
 {
@@ -47,15 +50,6 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     Button stopButton;
     FragmentManager fragmentManager;
 
-    public static QuoteWallFragment newInstance(String inputType, String inputName) {
-        QuoteWallFragment quoteWallFragment = new QuoteWallFragment();
-
-        Bundle args = new Bundle();
-        args.putString(inputType, inputName);
-        quoteWallFragment.setArguments(args);
-        return quoteWallFragment;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -66,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     @Override
     protected void onResume() {
         super.onResume();
+        changeStopButtonVisibility();
         Log.d(TAG, "onResume: ");
         if (getIntent() != null && getIntent().hasExtra("Quote") && getIntent().hasExtra("Author")) {
             onQuoteClicked(getIntent().getStringExtra("Quote"), getIntent().getStringExtra("Author"));
@@ -77,14 +72,9 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Log.d(TAG, "onBackStackChanged: LOL");
-            }
-        });
-//        fragmentManager.addOnBackStackChangedListener(this);
+        fragmentManager.addOnBackStackChangedListener(this);
 
         outAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         inAnimationAuth = AnimationUtils.loadAnimation(this, R.anim.fadein);
@@ -158,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
                 @Override
                 public void onClick(View v) {
                     AuthorFragment authorFragment = new AuthorFragment();
+                    authorFragment.setGiveAuthorToActivityListener(MainActivity.this);
                     fragmentManager
                             .beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -173,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
                 @Override
                 public void onClick(View v) {
                     TopicFragment topicFragment = new TopicFragment();
+                    topicFragment.setGiveTopicToActivityListener(MainActivity.this);
                     fragmentManager
                             .beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -240,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
     @Override
     public void giveAuthorToActivity(String mAuthorName) {
-        QuoteWallFragment quoteWallFragment = newInstance("AUTHOR", mAuthorName);
+        QuoteWallFragment quoteWallFragment = QuoteWallFragment.newInstance("AUTHOR", mAuthorName);
         fragmentManager
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -251,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
     @Override
     public void giveTopicToActivity(String mTopicName) {
-        QuoteWallFragment quoteWallFragment = newInstance("TOPIC", mTopicName);
+        QuoteWallFragment quoteWallFragment = QuoteWallFragment.newInstance("TOPIC", mTopicName);
         fragmentManager
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -269,24 +261,44 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     }
 
     @Override
-    public void onClick(View v) {
-//        stopButton.setVisibility(View.GONE);
-//        MyApplication.writeViewVisibility(View.GONE);
-        Log.d(TAG, "onClick: " + fragmentManager.getBackStackEntryCount());
+    public void onClick(final View v) {
+        MyApplication.writeViewVisibility(View.INVISIBLE);
+        NotificationManager notifyManager = (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notifyManager.cancel(1);
+        v.animate()
+                .translationY(v.getHeight() - (v.getHeight() / 3))
+                .setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        v.setEnabled(false);
+                    }
+                });
         PendingIntent.getService(this, 2, new Intent(this, NotifierService.class), PendingIntent.FLAG_UPDATE_CURRENT).cancel();
     }
 
-    
-
-/*    @Override
+    @Override
     public void onBackStackChanged() {
-        Log.d(TAG, "onBackStackChanged: ");
         if (fragmentManager.getBackStackEntryCount() == 0) {
-            Log.d(TAG, "onBackStackChanged: 1");
-            //noinspection ResourceType
-            stopButton.setVisibility(MyApplication.readViewVisibility());
+            changeStopButtonVisibility();
         }
     }
-*/
+
+    @SuppressWarnings("WrongConstant")
+    private void changeStopButtonVisibility() {
+
+        stopButton.animate()
+                .translationY(0)
+                .setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        stopButton.setEnabled(true);
+                    }
+                });
+
+//        stopButton.setVisibility(MyApplication.readViewVisibility());
+//        Log.d(TAG, "changeStopButtonVisibility: " + MyApplication.readViewVisibility());
+    }
 
 }

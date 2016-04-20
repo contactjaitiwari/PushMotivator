@@ -42,6 +42,8 @@ import io.realm.RealmResults;
  * A simple {@link Fragment} subclass.
  */
 public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTextListener, WallRecyclerViewAdapter.QuoteClickListener {
+
+
     private static final String TAG = "JT";
     Realm mRealm;
     RealmResults<Quote> mResults;
@@ -59,10 +61,8 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
                 mRealm = Realm.getInstance(config0);
                 if (mFilterInputType == "AUTHOR") {
                     mResults = mRealm.where(Quote.class).equalTo("AUTH_TITLE", mFilterInputReceived).findAll();
-                    mRealm.close();
                 } else if (mFilterInputType == "TOPIC") {
                     mResults = mRealm.where(Quote.class).equalTo("CAT_TITLE", mFilterInputReceived).findAll();
-                    mRealm.close();
                 }
                 Log.d(TAG, "run: Start Loop");
                 for (int i = 0; i < mResults.size(); i++) {
@@ -84,8 +84,16 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         }
     });
 
-
     public QuoteWallFragment() {
+    }
+
+    public static QuoteWallFragment newInstance(String inputType, String inputName) {
+        QuoteWallFragment quoteWallFragment = new QuoteWallFragment();
+
+        Bundle args = new Bundle();
+        args.putString(inputType, inputName);
+        quoteWallFragment.setArguments(args);
+        return quoteWallFragment;
     }
 
     @Override
@@ -167,7 +175,6 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
                 Intent intent = new Intent(context, NotifierService.class);
                 intent.putParcelableArrayListExtra("list", mFilterInputType != null ? description : new ArrayList<>(description.subList(0, 999)));
                 intent.putExtra("hours", np.getValue());
-                Log.d(TAG, "onClick: " + np.getValue() + "");
                 context.startService(intent);
             }
         });

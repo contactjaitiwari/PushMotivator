@@ -32,7 +32,6 @@ public class MyApplication extends Application {
             RealmConfiguration config0 = new RealmConfiguration.Builder(MyApplication.getContext()).name("default_realm").build();
             Realm mRealm = Realm.getInstance(config0);
             RealmResults<Quote> mResults = mRealm.where(Quote.class).findAll();
-            mRealm.close();
             Log.d(TAG, "run: " + mResults.size());
             Log.d(TAG, "run: Start Loop");
             for (int i = 0; i < mResults.size(); i++) {
@@ -60,11 +59,13 @@ public class MyApplication extends Application {
 
     public static void writeViewVisibility(int view_status) {
         editor = sharedPref.edit();
+        Log.d(TAG, "writeViewVisibility: " + view_status);
         editor.putInt("view_status", view_status);
         editor.apply();
     }
 
     public static int readViewVisibility() {
+        Log.d(TAG, "readViewVisibility: " + sharedPref.getInt("view_status", 0));
         return sharedPref.getInt("view_status", View.GONE);
     }
 
