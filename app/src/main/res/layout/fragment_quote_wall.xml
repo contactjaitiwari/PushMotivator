@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frag_wall_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -28,6 +29,18 @@
             android:src="@drawable/app_icon"
             app:backgroundTint="@color/red"
             app:elevation="10dp" />
+
+        <ImageView
+            android:id="@+id/animated_rocket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/push_started"
+            android:src="@drawable/ic_action_rocket"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

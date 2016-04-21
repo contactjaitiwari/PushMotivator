@@ -4,6 +4,7 @@ package braincap.pushmotivator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,11 +19,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 
 import java.util.ArrayList;
@@ -171,6 +174,7 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
             @Override
             public void onClick(View v) {
                 d.dismiss();
+                startRocket();
                 MyApplication.writeViewVisibility(View.VISIBLE);
                 Intent intent = new Intent(context, NotifierService.class);
                 intent.putParcelableArrayListExtra("list", mFilterInputType != null ? description : new ArrayList<>(description.subList(0, 999)));
@@ -182,10 +186,13 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_search, menu);
+    public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(true);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.clearFocus();
+        searchView.setQuery("", true);
+        searchView.setIconified(true);
         searchView.setOnQueryTextListener(this);
 
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
@@ -236,6 +243,34 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         quoteDetailsFragment.setQuote(quote);
         quoteDetailsFragment.setAuthor(author);
         quoteDetailsFragment.show(fragmentManager, "QUOTEDETAILSFRAG");
+    }
+
+    public void startRocket() {
+        final ImageView imageView = (ImageView) context.findViewById(R.id.animated_rocket);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setY(0 - imageView.getHeight());
+        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, context.findViewById(R.id.frag_wall_parent).getHeight(), 0 - imageView.getHeight());
+        translateAnimation.setDuration(1000);
+        translateAnimation.setInterpolator(context, android.R.anim.accelerate_interpolator);
+        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                final MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.ding);
+                mediaPlayer.start();
+                imageView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(translateAnimation);
     }
 
 }

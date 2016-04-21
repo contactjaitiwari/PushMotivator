@@ -49,7 +49,6 @@ public class QuoteDetailsFragment extends DialogFragment implements View.OnTouch
         TextView authorTextView = (TextView) view.findViewById(R.id.tv_author_text);
         authorTextView.setText(author);
         quoteTextView.setText(quote);
-        Toast.makeText(view.getContext(), "Tap to copy\nLong press to share", Toast.LENGTH_LONG).show();
     }
 
     @Override

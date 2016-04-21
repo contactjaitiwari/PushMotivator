@@ -12,7 +12,6 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +60,7 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
             tempAuthor.setCOUNT(mResultsAuth.get(i).getCOUNT());
             authorList.add(tempAuthor);
         }
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_author, container, false);
     }
 
@@ -76,7 +76,6 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         recyclerView.setAdapter(rcAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         recyclerView.addItemDecoration(decoration);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -90,14 +89,15 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         this.giveAuthorToActivityListener = giveAuthorToActivityListener;
     }
 
-    //Search Listener
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_search, menu);
-
+    public void onPrepareOptionsMenu(Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu: ");
         MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(true);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.clearFocus();
+        searchView.setQuery("", true);
+        searchView.setIconified(true);
         searchView.setOnQueryTextListener(this);
 
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
@@ -140,17 +140,12 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         return filteredModelList;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, String.format("onDestroyView(%s)", this));
-        searchView.setOnQueryTextListener(null);
-        searchView.setQuery("", true);
-        searchView.setIconified(true);
-    }
-
     public interface GiveAuthorToActivityListener {
         void giveAuthorToActivity(String mAuthorName);
     }
 
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        onQueryTextChange("");
+//    }
 }

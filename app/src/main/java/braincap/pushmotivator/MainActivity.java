@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -58,10 +59,17 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search_wall, menu);
+        menu.findItem(R.id.action_search).setVisible(false);
+        return true;
+    }
+
+
+    @Override
     protected void onResume() {
         super.onResume();
-        changeStopButtonVisibility();
-        Log.d(TAG, "onResume: ");
+        updateStopButton();
         if (getIntent() != null && getIntent().hasExtra("Quote") && getIntent().hasExtra("Author")) {
             onQuoteClicked(getIntent().getStringExtra("Quote"), getIntent().getStringExtra("Author"));
         }
@@ -72,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        invalidateOptionsMenu();
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
@@ -263,42 +272,43 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     @Override
     public void onClick(final View v) {
         MyApplication.writeViewVisibility(View.INVISIBLE);
+        updateStopButton();
         NotificationManager notifyManager = (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notifyManager.cancel(1);
-        v.animate()
-                .translationY(v.getHeight() - (v.getHeight() / 3))
-                .setDuration(300)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        v.setEnabled(false);
-                    }
-                });
         PendingIntent.getService(this, 2, new Intent(this, NotifierService.class), PendingIntent.FLAG_UPDATE_CURRENT).cancel();
     }
 
     @Override
     public void onBackStackChanged() {
         if (fragmentManager.getBackStackEntryCount() == 0) {
-            changeStopButtonVisibility();
+            updateStopButton();
         }
     }
 
-    @SuppressWarnings("WrongConstant")
-    private void changeStopButtonVisibility() {
-
-        stopButton.animate()
-                .translationY(0)
-                .setDuration(300)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        stopButton.setEnabled(true);
-                    }
-                });
-
-//        stopButton.setVisibility(MyApplication.readViewVisibility());
-//        Log.d(TAG, "changeStopButtonVisibility: " + MyApplication.readViewVisibility());
+    private void updateStopButton() {
+        if (MyApplication.readViewVisibility() == View.VISIBLE) {
+            stopButton.animate()
+                    .translationY(0)
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            //noinspection WrongConstant
+                            stopButton.setEnabled(true);
+                        }
+                    });
+        } else {
+            stopButton.animate()
+                    .translationY(stopButton.getHeight() - (stopButton.getHeight() / 3))
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            //noinspection WrongConstant
+                            stopButton.setEnabled(false);
+                        }
+                    });
+        }
     }
-
 }
+

@@ -18,5 +18,6 @@
     <string name="start_pushing">Start Pushing</string>
     <string name="hour">hour</string>
     <string name="share_using">Share using</string>
+    <string name="push_started">Push started</string>
 </resources>
 

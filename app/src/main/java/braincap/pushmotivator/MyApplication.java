@@ -59,13 +59,11 @@ public class MyApplication extends Application {
 
     public static void writeViewVisibility(int view_status) {
         editor = sharedPref.edit();
-        Log.d(TAG, "writeViewVisibility: " + view_status);
         editor.putInt("view_status", view_status);
         editor.apply();
     }
 
     public static int readViewVisibility() {
-        Log.d(TAG, "readViewVisibility: " + sharedPref.getInt("view_status", 0));
         return sharedPref.getInt("view_status", View.GONE);
     }
 

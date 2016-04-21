@@ -38,6 +38,7 @@ public class NotifierService extends Service {
                         .setAutoCancel(true)
                         .setDefaults(0)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setContentText("New Quote!")
                         .setContentTitle("Push Motivator")
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(list.get(itr).getPOST_DESCRIPTION().trim() + "\n\n-" + list.get(itr).getAUTH_TITLE().trim()));
 

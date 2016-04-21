@@ -23,11 +23,38 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/dialog_divider" />
 
+
+    <TextView
+        android:id="@+id/tv_hint_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/vw_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:alpha="0.5"
+        android:paddingTop="10dp"
+        android:text="Tap to copy"
+        android:textSize="10dp" />
+
+
+    <TextView
+        android:id="@+id/tv_hint_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/vw_margin"
+        android:alpha="0.5"
+        android:paddingBottom="10dp"
+        android:text="Long press to share"
+        android:textSize="10dp" />
+
+
     <TextView
         android:id="@+id/tv_author_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/vw_margin"
+        android:layout_below="@id/tv_hint_2"
         android:gravity="end|bottom"
         android:text="Author"
         android:textColor="@color/primary"
