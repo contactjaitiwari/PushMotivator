@@ -34,7 +34,7 @@ public class NotifierService extends Service {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.app_icon)
+                        .setSmallIcon(R.drawable.ic_format_quote)
                         .setAutoCancel(true)
                         .setDefaults(0)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -60,7 +60,7 @@ public class NotifierService extends Service {
         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarm.set(
                 AlarmManager.RTC,
-                System.currentTimeMillis() + (1000 * hours),
+                System.currentTimeMillis() + (1000 * hours * 60 * 60),
                 PendingIntent.getService(this, 2, intentRepeatNow, PendingIntent.FLAG_CANCEL_CURRENT)
         );
         stopSelf();

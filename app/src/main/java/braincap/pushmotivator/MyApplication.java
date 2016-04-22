@@ -64,7 +64,7 @@ public class MyApplication extends Application {
     }
 
     public static int readViewVisibility() {
-        return sharedPref.getInt("view_status", View.GONE);
+        return sharedPref.getInt("view_status", View.INVISIBLE);
     }
 
     @Override

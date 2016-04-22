@@ -19,5 +19,6 @@
     <string name="hour">hour</string>
     <string name="share_using">Share using</string>
     <string name="push_started">Push started</string>
+    <string name="not_pushing">Not Pushing</string>
 </resources>
 

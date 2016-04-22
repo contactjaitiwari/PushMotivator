@@ -28,10 +28,8 @@ public class WallRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private LayoutInflater mInflater;
     private ArrayList<ResultQuote> description;
     private int lastPosition = -1;
-    private FragmentActivity activity;
 
     public WallRecyclerViewAdapter(FragmentActivity activity) {
-        this.activity = activity;
         description = new ArrayList<>();
         mInflater = LayoutInflater.from(activity);
         colorIds.add(R.color.col1);

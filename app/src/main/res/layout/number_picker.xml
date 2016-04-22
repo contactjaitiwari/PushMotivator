@@ -3,7 +3,7 @@
     android:id="@+id/durationPicker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/popup_frame"
+    android:background="@drawable/text_banner"
     android:focusableInTouchMode="false"
     android:padding="10dp">
 
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/push_every"
-        android:textColor="@color/accent"
+        android:textColor="@color/primary"
         android:textSize="25sp" />
 
     <NumberPicker
@@ -21,9 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/banner_1"
-        android:background="@color/primary"
+        android:background="@color/light"
         android:descendantFocusability="blocksDescendants"
-        android:solidColor="@color/primary"
+        android:solidColor="@color/light"
         android:theme="@style/NumberPickerTextColorStyle" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_below="@id/numberPicker"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/hour"
-        android:textColor="@color/accent"
+        android:textColor="@color/primary"
         android:textSize="25sp" />
 
     <Button
@@ -44,6 +44,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="@string/start_pushing"
-        android:theme="@style/AppTheme.GreenButton" />
+        android:theme="@style/AppTheme.Button" />
 
 </RelativeLayout>

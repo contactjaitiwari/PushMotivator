@@ -46,7 +46,6 @@ import io.realm.RealmResults;
  */
 public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTextListener, WallRecyclerViewAdapter.QuoteClickListener {
 
-
     private static final String TAG = "JT";
     Realm mRealm;
     RealmResults<Quote> mResults;
@@ -102,7 +101,6 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             if (getArguments().getString("AUTHOR") != null) {
                 mFilterInputType = "AUTHOR";
@@ -125,9 +123,11 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         RecyclerView recyclerView = (RecyclerView) context.findViewById(R.id.recycler_view);
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab);
+        floatingActionButton.requestFocus();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,11 +159,12 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         realmToArray.start();
         SpacesItemDecoration decoration = new SpacesItemDecoration(5);
         recyclerView.addItemDecoration(decoration);
+
     }
 
     private void show() {
         final Dialog d = new Dialog(context);
-        d.setTitle("NumberPicker");
+        d.setTitle("Select repeat interval hour");
         d.setContentView(R.layout.number_picker);
         final Button b1 = (Button) d.findViewById(R.id.startButton);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker);
@@ -191,9 +192,12 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         item.setVisible(true);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.clearFocus();
+        searchView.setFocusable(false);
         searchView.setQuery("", true);
         searchView.setIconified(true);
         searchView.setOnQueryTextListener(this);
+        searchView.setFocusable(false);
+
 
         MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -261,6 +265,8 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
             @Override
             public void onAnimationEnd(Animation animation) {
                 final MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.ding);
+                final float volume = (float) (1 - (Math.log(50 - 25) / Math.log(50)));
+                mediaPlayer.setVolume(volume, volume);
                 mediaPlayer.start();
                 imageView.setVisibility(View.INVISIBLE);
             }
@@ -272,7 +278,6 @@ public class QuoteWallFragment extends Fragment implements SearchView.OnQueryTex
         });
         imageView.startAnimation(translateAnimation);
     }
-
 }
 
 

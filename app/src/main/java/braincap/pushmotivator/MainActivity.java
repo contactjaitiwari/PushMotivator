@@ -1,7 +1,5 @@
 package braincap.pushmotivator;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -26,7 +25,7 @@ import java.util.Collections;
 import braincap.pushmotivator.notifier.NotifierService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-
+import me.grantland.widget.AutofitHelper;
 
 public class MainActivity extends AppCompatActivity implements AuthorFragment.GiveAuthorToActivityListener
         , TopicFragment.GiveTopicToActivityListener
@@ -79,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AutofitHelper.create((TextView) findViewById(R.id.tv_main_author));
+        AutofitHelper.create((TextView) findViewById(R.id.tv_main_topic));
+        AutofitHelper.create((TextView) findViewById(R.id.tv_main_wall));
 
         invalidateOptionsMenu();
 
@@ -287,27 +290,11 @@ public class MainActivity extends AppCompatActivity implements AuthorFragment.Gi
 
     private void updateStopButton() {
         if (MyApplication.readViewVisibility() == View.VISIBLE) {
-            stopButton.animate()
-                    .translationY(0)
-                    .setDuration(300)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            //noinspection WrongConstant
-                            stopButton.setEnabled(true);
-                        }
-                    });
+            stopButton.setText(R.string.stop_pushing);
+            stopButton.setEnabled(true);
         } else {
-            stopButton.animate()
-                    .translationY(stopButton.getHeight() - (stopButton.getHeight() / 3))
-                    .setDuration(300)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            //noinspection WrongConstant
-                            stopButton.setEnabled(false);
-                        }
-                    });
+            stopButton.setText(R.string.not_pushing);
+            stopButton.setEnabled(false);
         }
     }
 }

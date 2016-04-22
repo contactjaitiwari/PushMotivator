@@ -96,6 +96,7 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
         item.setVisible(true);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.clearFocus();
+        searchView.setFocusable(false);
         searchView.setQuery("", true);
         searchView.setIconified(true);
         searchView.setOnQueryTextListener(this);
@@ -143,9 +144,4 @@ public class AuthorFragment extends Fragment implements AuthorRecyclerViewAdapte
     public interface GiveAuthorToActivityListener {
         void giveAuthorToActivity(String mAuthorName);
     }
-
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        onQueryTextChange("");
-//    }
 }
